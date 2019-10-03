@@ -1,7 +1,7 @@
 ﻿using Sample.Repositories;
 using Sample.Constants;
 using Microsoft.AspNetCore.Mvc;
-using Sample.Data.Entities;
+// using Sample.Data.Entities;
 
 namespace Sample.Controllers
 {
@@ -18,21 +18,22 @@ namespace Sample.Controllers
             #region validation
             // TODO: postBody validation
             UsersRepository userRepo = new UsersRepository();
-            Users user = userRepo.GetUserByEmail(email);
-            if (user == null)
+            // Users user = userRepo.GetUserByEmail(email);
+            // if (user == null)
             {
 
             }
             #endregion
 
-            bool setStateResult = userRepo.SetupUserToForgotPasswordState(user);
-            if (setStateResult)
-            {
-                // TODO: Implment SMTPService; 
-                // SMTPService.Send($"{ENV.END_POINT}/auth/reset-password?token={user.reset_password_token}&redirect-url={HttpUtility.UrlEncode(redirectUrl);}";
-            }
+            // bool setStateResult = userRepo.SetupUserToForgotPasswordState(user);
+            // if (setStateResult)
+            // {
+            // TODO: Implment SMTPService; 
+            // SMTPService.Send($"{ENV.END_POINT}/auth/reset-password?token={user.reset_password_token}&redirect-url={HttpUtility.UrlEncode(redirectUrl);}";
+            // }
 
-            return new {
+            return new
+            {
                 data = CUSTOM_RESPONSE.STATUS.OK.ToString()
             };
         }

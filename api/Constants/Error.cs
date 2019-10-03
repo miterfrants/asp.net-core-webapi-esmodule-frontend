@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.Net;
 
 namespace Sample.Constants
 {
@@ -16,10 +14,20 @@ namespace Sample.Constants
     {
         public int ErrorCode;
         public string ErrorMessage;
-        public ErrorObject(int ErrorCode,string ErrorMessage)
+        public ErrorObject(int ErrorCode, string ErrorMessage)
         {
             this.ErrorCode = ErrorCode;
             this.ErrorMessage = ErrorMessage;
+        }
+    }
+
+    public class CustomException : Exception
+    {
+        public HttpStatusCode code;
+        public CustomException(string message, HttpStatusCode code = HttpStatusCode.OK)
+            : base(message)
+        {
+            this.code = code;
         }
     }
 }

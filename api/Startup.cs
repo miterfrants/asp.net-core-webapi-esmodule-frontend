@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 using Sample.Constants;
-using Sample.Data;
+// using Sample.Data;
 using Sample.Helpers;
 
 namespace Sample
@@ -34,11 +36,11 @@ namespace Sample
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             AppSettings appSettings = new AppSettings();
             Configuration.GetSection("Config").Bind(appSettings);
 
-            services.AddDbContext<SampleContext>(options => options.UseSqlServer(appSettings.Secrets.DBConnectionString));
+            // services.AddDbContext<SampleContext>(options => options.UseSqlServer(appSettings.Secrets.DBConnectionString));
             services.Configure<AppSettings>(Configuration.GetSection("Config"));
 
             // add JWT secret to application layer 
@@ -94,24 +96,22 @@ namespace Sample
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            Newtonsoft.Json.JsonConvert.SerializeObject(env);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
+            else
             {
-                endpoints.MapControllers();
-            });
+                app.UseHsts();
+            }
+            app.UseHttpsRedirection();
+            app.UseAuthentication();
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+            app.UseMvc();
+
         }
     }
 }
