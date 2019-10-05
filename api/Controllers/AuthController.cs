@@ -1,7 +1,8 @@
-﻿using Sample.Repositories;
+﻿using Microsoft.AspNetCore.Mvc;
+
+using Sample.DataServices;
 using Sample.Constants;
-using Microsoft.AspNetCore.Mvc;
-// using Sample.Data.Entities;
+using System.Net;
 
 namespace Sample.Controllers
 {
@@ -17,7 +18,6 @@ namespace Sample.Controllers
 
             #region validation
             // TODO: postBody validation
-            UsersRepository userRepo = new UsersRepository();
             // Users user = userRepo.GetUserByEmail(email);
             // if (user == null)
             {

@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using System.Text;
 
 using Microsoft.IdentityModel.Tokens;
@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 
 using Sample.Constants;
-// using Sample.Data;
+using Sample.Data;
 using Sample.Helpers;
 
 namespace Sample
@@ -40,11 +40,10 @@ namespace Sample
             AppSettings appSettings = new AppSettings();
             Configuration.GetSection("Config").Bind(appSettings);
 
-            // services.AddDbContext<SampleContext>(options => options.UseSqlServer(appSettings.Secrets.DBConnectionString));
+            services.AddDbContext<DBContext>(options => options.UseSqlServer(appSettings.Secrets.DBConnectionString));
             services.Configure<AppSettings>(Configuration.GetSection("Config"));
 
             // add JWT secret to application layer 
-            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(appSettings));
             var encodedJwtSecret = Encoding.ASCII.GetBytes(appSettings.Secrets.JwtKey);
             services.AddAuthentication(x =>
             {
