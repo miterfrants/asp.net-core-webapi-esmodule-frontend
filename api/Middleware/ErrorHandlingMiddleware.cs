@@ -6,6 +6,7 @@ using System.Net;
 using Newtonsoft.Json;
 
 using Sample.Constants;
+using Sample.Helpers;
 
 public class ErrorHandlingMiddleware
 {
@@ -17,7 +18,6 @@ public class ErrorHandlingMiddleware
 
     public async Task Invoke(HttpContext context /* other dependencies */)
     {
-
         try
         {
             await next(context);
@@ -31,16 +31,18 @@ public class ErrorHandlingMiddleware
     private static Task HandleExceptionAsync(HttpContext context, Exception ex)
     {
         var code = HttpStatusCode.InternalServerError;
-        if (ex.GetType() == typeof(ErrorObject))
+        string internalErrorMessage = ex.Message;
+        if (ex.GetType() == typeof(CustomException))
         {
-            var mindnoteEx = (CustomException)ex;
-            if (mindnoteEx.code != HttpStatusCode.OK)
+            var customEx = (CustomException)ex;
+            if (customEx.code != HttpStatusCode.OK)
             {
-                code = mindnoteEx.code;
+                code = customEx.code;
             }
+
+            internalErrorMessage = ErrorHelper.GetErrorMessageByCode(customEx.errorCode);
         }
-        var result = new { status = CUSTOM_RESPONSE.STATUS.FAILED.ToString(), data = new { message = ex.Message, stackTrace = ex.StackTrace } };
-        //var result = new JSONResponse(JSONResponseStatus.FAILED, new { message = ex.Message });
+        var result = new { status = CUSTOM_RESPONSE.STATUS.FAILED.ToString(), data = new { message = internalErrorMessage, stackTrace = ex.StackTrace } };
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)code.GetHashCode();
         return context.Response.WriteAsync(JsonConvert.SerializeObject(result));

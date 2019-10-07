@@ -2,20 +2,18 @@
 using System.Security.Cryptography;
 using System.Text;
 
+using Sample.DTOs;
+
 namespace Sample.Helpers
 {
     public class CryptographicHelper
     {
-        public static SaltedPassword GenerateSaltedHash(int maxSize, string password)
+        public static string GenerateSaltedHash(string password, string salt)
         {
-            byte[] salt = GetSalt(maxSize);
-            string saltString = System.Text.Encoding.UTF8.GetString(salt);
-
-            var rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, salt, 10000);
+            byte[] byteOfSalt = Encoding.ASCII.GetBytes(salt);
+            var rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, byteOfSalt, 10000);
             var hashPassword = Convert.ToBase64String(rfc2898DeriveBytes.GetBytes(128));
-
-            SaltedPassword saltedPassword = new SaltedPassword { Hash = hashPassword, Salt = saltString };
-            return saltedPassword;
+            return hashPassword;
         }
 
         public static string GetSpecificLengthRandomString(int size, bool isLowerCase = false)
@@ -35,22 +33,14 @@ namespace Sample.Helpers
             return builder.ToString();
         }
 
-        private static byte[] GetSalt(int maxSize)
+        public static string GetSalt(int maxSize)
         {
             var salt = new byte[maxSize];
             using (var random = new RNGCryptoServiceProvider())
             {
                 random.GetNonZeroBytes(salt);
             }
-            return salt;
+            return System.Text.Encoding.UTF8.GetString(salt);
         }
     }
-
-    public class SaltedPassword
-    {
-        public string Hash { get; set; }
-        public string Salt { get; set; }
-    }
-
-    
 }

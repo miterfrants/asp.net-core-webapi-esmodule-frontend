@@ -1,5 +1,3 @@
-﻿using System;
-
 namespace Sample.Helpers
 {
     public class AppSettings
@@ -15,7 +13,7 @@ namespace Sample.Helpers
 
     public class Auth
     {
-        public Int16 JwtExpiration { get; set; }
+        public int JwtExpiration { get; set; }
     }
 
     public class Secrets

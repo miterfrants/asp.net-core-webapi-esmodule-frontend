@@ -16,9 +16,10 @@ namespace Sample.Controllers
 
         [Route("users")]
         [HttpGet]
-        public ActionResult<dynamic> Testing()
+        public ActionResult<dynamic> GetList([FromQuery] int page, [FromQuery] int limit)
         {
-            return _dbContext.Users.Where(x => 1 == 1).ToList();
+            return _dbContext.Users.Where(x => x.DeletedAt == null).OrderByDescending(x => x.Id).Skip(limit * page - 1).Take(limit)
+            .Select(x => new { id = x.Id, email = x.Email }).ToList();
         }
     }
 }
