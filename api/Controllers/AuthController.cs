@@ -18,9 +18,11 @@ namespace Sample.Controllers
 
         private readonly DBContext _dbContext;
         private readonly string _jwtKey;
+        private readonly int _jwtExpirationMonth;
         public AuthController(DBContext dbContext, IOptions<AppSettings> appSettings)
         {
             _jwtKey = appSettings.Value.Secrets.JwtKey;
+            _jwtExpirationMonth = appSettings.Value.Common.Auth.JwtExpirationMonth;
             _dbContext = dbContext;
         }
 
@@ -43,7 +45,7 @@ namespace Sample.Controllers
 
             #region generate token
             // todo: implment role
-            string token = JWTHelper.GenerateToken(_jwtKey, 6, new { userId = user.Id, role = "", username = user.Username });
+            string token = JWTHelper.GenerateToken(_jwtKey, _jwtExpirationMonth, new { userId = user.Id, role = "", username = user.Username });
             return new { token = token };
             #endregion
         }

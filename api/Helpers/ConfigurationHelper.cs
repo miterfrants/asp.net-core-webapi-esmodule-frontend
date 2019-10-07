@@ -13,7 +13,7 @@ namespace Sample.Helpers
 
     public class Auth
     {
-        public int JwtExpiration { get; set; }
+        public int JwtExpirationMonth { get; set; }
     }
 
     public class Secrets
