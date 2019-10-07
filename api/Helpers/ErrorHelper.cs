@@ -14,6 +14,7 @@ public class ErrorHelper
             case ERROR_CODE.USER_NOT_FOUND: return "User not found";
             case ERROR_CODE.TOKEN_EXPIRED: return "Token expired";
             case ERROR_CODE.UNAUTH_TOKEN: return "Unauh token";
+            case ERROR_CODE.LOGIN_REQUIRE: return "Login require";
             default:
                 return "Internal error";
         }

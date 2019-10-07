@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 using Sample.Data;
 
 namespace Sample.Controllers
 {
+    [Authorize]
     [Route("api/v1")]
     public class UsersController : ControllerBase
     {

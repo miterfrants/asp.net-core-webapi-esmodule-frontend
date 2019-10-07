@@ -4,8 +4,6 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
-using Newtonsoft.Json;
-
 using Sample.Constants;
 using Sample.Data;
 using Sample.DTOs;
@@ -121,8 +119,8 @@ namespace Sample.Controllers
         [HttpPost]
         public ActionResult<dynamic> RefreshToken()
         {
-            string token;
-            Request.Cookies.TryGetValue("JWT", out token);
+            string authorization = Request.Headers["Authorization"];
+            string token = authorization.Substring("Bearer ".Length).Trim();
             dynamic extraPayload = JWTHelper.GetExtraPayload(_jwtKey, token);
             if (extraPayload == null)
             {

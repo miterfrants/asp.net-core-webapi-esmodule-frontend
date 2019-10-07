@@ -10,11 +10,10 @@ namespace Sample.Helpers
 {
     public class JWTHelper
     {
-
         public static string GenerateToken(string key, int expirationMonth = 1, dynamic extraPayload = null)
         {
-            var expirationDate = DateTime.Now.AddMonths(expirationMonth);
-            Int32 unixTimestamp = (Int32)(expirationDate.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            var expirationTime = DateTime.Now.ToUniversalTime().AddMonths(expirationMonth);
+            Int32 unixTimestamp = (Int32)(expirationTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
             var securityKey = new SymmetricSecurityKey(Encoding.Default.GetBytes(key));
             var signingCredentials = new SigningCredentials(
@@ -35,7 +34,7 @@ namespace Sample.Helpers
             return tokenString;
         }
 
-        public static object DecodeToken(string token)
+        public static dynamic DecodeToken(string token)
         {
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
             return handler.ReadJwtToken(token).Payload;

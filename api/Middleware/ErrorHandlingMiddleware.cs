@@ -42,7 +42,7 @@ public class ErrorHandlingMiddleware
 
             internalErrorMessage = ErrorHelper.GetErrorMessageByCode(customEx.errorCode);
         }
-        var result = new { status = CUSTOM_RESPONSE.STATUS.FAILED.ToString(), data = new { message = internalErrorMessage, stackTrace = ex.StackTrace } };
+        var result = new { message = internalErrorMessage, stackTrace = ex.StackTrace };
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)code.GetHashCode();
         return context.Response.WriteAsync(JsonConvert.SerializeObject(result));

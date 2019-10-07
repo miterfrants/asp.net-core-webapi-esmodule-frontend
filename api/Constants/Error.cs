@@ -15,6 +15,7 @@ namespace Sample.Constants
         USER_NOT_FOUND = 200003,
         TOKEN_EXPIRED = 200004,
         UNAUTH_TOKEN = 200005,
+        LOGIN_REQUIRE = 200006,
 
         // 3 internal error
         INTERNAL_ERROR = 5000001
