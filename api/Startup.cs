@@ -80,9 +80,7 @@ namespace Sample
                     {
                         string authorization = context.Request.Headers["Authorization"];
                         string token = authorization.Substring("Bearer ".Length).Trim();
-                        // Console.WriteLine(JWTHelper.DecodeToken(token)["exp"]);
                         DateTime expirationTime = new DateTime(1970, 1, 1).ToLocalTime().AddSeconds((int)JWTHelper.DecodeToken(token)["exp"]);
-                        Console.WriteLine(expirationTime.ToLongTimeString());
                         if (expirationTime < DateTime.Now)
                         {
                             byte[] bytes = Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(new
