@@ -34,6 +34,7 @@ namespace Sample
         }
 
         public IConfiguration Configuration { get; }
+        readonly string AllowSpecificOrigins = "";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -41,6 +42,21 @@ namespace Sample
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             AppSettings appSettings = new AppSettings();
             Configuration.GetSection("Config").Bind(appSettings);
+
+            // setup CROS if config file includ CROS section
+            IConfigurationSection CROSSection = Configuration.GetSection("CROS");
+            string crossOrigin = Configuration.GetSection("CROS").GetValue<string>("Origin");
+            if (crossOrigin != null)
+            {
+                services.AddCors(options =>
+                {
+                    options.AddPolicy(AllowSpecificOrigins,
+                    builder =>
+                    {
+                        builder.WithOrigins(crossOrigin).AllowAnyHeader().AllowAnyMethod().SetPreflightMaxAge(TimeSpan.FromSeconds(600)); ;
+                    });
+                });
+            }
 
             services.AddDbContext<DBContext>(options => options.UseSqlServer(appSettings.Secrets.DBConnectionString));
             services.Configure<AppSettings>(Configuration.GetSection("Config"));
@@ -117,6 +133,7 @@ namespace Sample
             {
                 app.UseHsts();
             }
+            app.UseCors(AllowSpecificOrigins);
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));

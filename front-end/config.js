@@ -1,3 +1,3 @@
 export const APP_CONFIG = {
-    API_ENDPOINT: 'https://pn.sainteir.com/api/v1/'
+    API_ENDPOINT: 'https://localhost/api/v1/'
 };

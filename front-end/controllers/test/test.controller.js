@@ -2,6 +2,10 @@ import {
     RouterController
 } from '/route/router-controller.js';
 
+import {
+    UsersDataService
+} from '/dataservices/users.dataservice.js';
+
 export class TestController extends RouterController {
     async init(args, context) {
         this.context = context;
@@ -13,6 +17,10 @@ export class TestController extends RouterController {
     }
 
     async render() {
+        let resp = await UsersDataService.get({
+            limit: 2,
+            page: 1
+        });
         super.render();
     }
 

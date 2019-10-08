@@ -5,6 +5,7 @@ export const RESPONSE_STATUS = {
 
 export const API = {
     AUTHORIZED: {
+        USERS: 'users?page={page}&limit={limit}',
         BOARDS: 'users/me/boards/',
         BOARD: 'users/me/boards/{boardId}/',
         NODES: 'users/me/boards/{boardId}/nodes/',

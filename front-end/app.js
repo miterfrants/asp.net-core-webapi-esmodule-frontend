@@ -3,21 +3,15 @@ import {
 } from '/route/route.js';
 
 import {
-    RESPONSE_STATUS,
-    API
-} from '/constants.js';
-
-import {
-    APP_CONFIG
-} from '/config.js';
-
-import {
-    Api
-} from '/util/api.js';
-
-import {
     CustomError
 } from '/util/custom-error.js';
+
+import {
+    extendStringProtoType,
+    extendHTMLElementProtoType
+} from '/util/extended-prototype.js';
+extendStringProtoType();
+extendHTMLElementProtoType();
 
 export const APP = {
     run: (isUpdateDOMFirstRunRouting) => {
@@ -39,7 +33,6 @@ export const APP = {
             }
         });
         APP.isUpdateDOMFirstRunRouting = !!isUpdateDOMFirstRunRouting;
-        Api.init(APP_CONFIG.API_ENDPOINT, API, RESPONSE_STATUS);
         Route.init(APP);
     }
 };
